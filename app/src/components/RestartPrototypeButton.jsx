@@ -1,3 +1,4 @@
+import React from 'react'
 import { useAppState } from '../state/AppStateProvider.jsx'
 
 export default function RestartPrototypeButton() {

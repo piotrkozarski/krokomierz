@@ -1,3 +1,4 @@
+import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import RestartPrototypeButton from './components/RestartPrototypeButton.jsx'
 import ViewModeToggle from './components/ViewModeToggle.jsx'
