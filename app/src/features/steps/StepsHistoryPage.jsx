@@ -17,6 +17,16 @@ export default function StepsHistoryPage() {
     .map(([date, steps]) => ({ date, steps }))
     .sort((a, b) => (a.date < b.date ? 1 : -1)), [historyMap])
 
+  const now = new Date()
+  const activeYear = now.getFullYear()
+  const activeMonth = now.getMonth() // 0-11
+  const getDaysInMonth = (y, m) => new Date(y, m + 1, 0).getDate()
+  const toISO = (y, m, d) => `${y}-${String(m + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
+  const isTodayFn = (y, m, d) => {
+    const t = new Date()
+    return y === t.getFullYear() && m === t.getMonth() && d === t.getDate()
+  }
+
   const weekDataRaw = useMemo(() => {
     const days = lastNDays(historyArray, 7).reverse() // oldest -> newest
     const dayNames = ['Nd','Pn','Wt','Śr','Cz','Pt','Sb']
@@ -30,14 +40,15 @@ export default function StepsHistoryPage() {
   }, [historyArray])
 
   const monthDataRaw = useMemo(() => {
-    const days = lastNDays(historyArray, 31).reverse()
-    return days.map(d => {
-      const dt = new Date(d.date)
-      const label = String(dt.getDate())
-      const val = Number(d.steps || 0)
-      return { label, value: val, muted: val === 0 }
-    })
-  }, [historyArray])
+    const dim = getDaysInMonth(activeYear, activeMonth)
+    const res = []
+    for (let day = 1; day <= dim; day += 1) {
+      const iso = toISO(activeYear, activeMonth, day)
+      const val = Number(historyMap[iso] || 0)
+      res.push({ label: String(day), value: val, muted: val === 0, today: isTodayFn(activeYear, activeMonth, day) })
+    }
+    return res
+  }, [historyMap, activeYear, activeMonth])
 
   const safeWeekData = useMemo(() => weekDataRaw.map(d => ({ ...d, value: coerceSteps(d.value) })), [weekDataRaw])
   const safeMonthData = useMemo(() => monthDataRaw.map(d => ({ ...d, value: coerceSteps(d.value) })), [monthDataRaw])
