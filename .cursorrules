@@ -1,0 +1,35 @@
+# PROJECT: KROKOMIERZ for "Bezpieczna Rodzina"
+## Mission
+Zbudować klikalny prototyp modułu „Krokomierz” zgodny ze specyfikacją i makietami (docs/).
+Priorytet: opiekun monitoruje aktywność podopiecznego (dziecko / senior / zwierzę).
+
+## Source of truth (READ FIRST)
+- docs/LOCON-KROKOMIERZ-311025-095616.pdf  ← specyfikacja funkcjonalna, dane, cele.
+- docs/krokomierz-makiety.html ← układ ekranów: mapa+widget, szczegóły, historia, modale.
+
+## UX / UI constraints (hard requirements)
+- Widget kroków na mapie: okrąg ~70x70, top-center, pełna liczba kroków, kolor wg progresu; klik = przejście do szczegółów.
+- Widok szczegółowy: duży okrąg postępu (200/160), przyciski: „Ustaw cel” i „Historia”; karty: średnia 7 dni, rekord, passa.
+- Historia: 2 zakładki (Tydzień, Miesiąc); 7 szerokich / 31 wąskich słupków; klik = modal szczegółów dnia.
+- Domyślne cele: GJD=8000, BS=3000, BZ=6000 (dziecko/senior/zwierzę); personalizacja per device.
+- Komunikaty push kierowane do opiekuna, zawierają nazwę urządzenia.
+- Kolory postępu: <75% czerwony, 75–99% pomarańczowy, ≥100% złoty.
+
+## Tech & scope for prototype
+- Celem jest klikalny prototyp (front), bez backendu – dane mock w pamięci/JSON.
+- Komponenty: MapView+StepsWidget, PedometerDetail, History (Week/Month), DayDetailModal, GoalModal.
+- Prosty routing (React Router / Next), responsywność zachowana.
+- Layout zgodny z makietami, bez modyfikacji kolorystyki.
+
+## Non-goals
+- Brak realnego liczenia kroków, sensorów, integracji z API.
+- Brak prawdziwego Firebase – tylko stuby i eventy symulowane.
+
+## Naming & structure
+- src/features/pedometer/… ; nazwy domenowe (StepsWidget, PedometerCircle, HistoryChart).
+- Kolory i copy z makiet/spec – bez zmian tonów/statusów.
+
+## Definition of Done
+- Przejście: Mapa → Szczegóły → Historia → Modale działa.
+- Stany widgetu: <100%, ≈75%, ≥100% poprawnie odwzorowane.
+- Działa dla trzech typów urządzeń (dziecko, senior, zwierzę).

@@ -1,0 +1,10 @@
+# Ignore dla Cursora (nie czyta tych katalogów)
+node_modules/
+dist/
+build/
+.vscode/
+.cache/
+*.log
+*.map
+.DS_Store
+coverage/

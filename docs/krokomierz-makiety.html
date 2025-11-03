@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makiety - Funkcja Krokomierz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+            font-size: 32px;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: #2C5282;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #D4A574;
+            display: inline-block;
+        }
+        
+        .mockups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
+            gap: 30px;
+        }
+        
+        .mockup-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .mockup-header {
+            background: linear-gradient(135deg, #2C5282 0%, #3D6D99 100%);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .mockup-description {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 35px;
+            padding: 8px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 27px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            background: #fff;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+        }
+        
+        /* Mapa główna z widgetem */
+        .map-main {
+            height: calc(100% - 50px);
+            background: #f0f0f0;
+            position: relative;
+        }
+        
+        .device-marker {
+            position: absolute;
+            top: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 40px;
+            background: #FF9500;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 2px solid #FF7000;
+            box-shadow: 0 4px 8px rgba(255, 149, 0, 0.3);
+        }
+        
+        .home-marker {
+            position: absolute;
+            top: 350px;
+            left: 30%;
+            width: 24px;
+            height: 24px;
+            background: #4285F4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .steps-widget {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+        
+        .steps-widget.orange { background: #FF9800; }
+        .steps-widget.red { background: #FF5722; }
+        .steps-widget.gold { background: #FFD700; color: #333; }
+        
+        .steps-widget .icon {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+        
+        .steps-widget .count {
+            font-size: 9px;
+            font-weight: bold;
+        }
+        
+        .location-card {
+            position: absolute;
+            bottom: 80px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        
+        .location-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .wifi-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #FFF3E0;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #E65100;
+        }
+        
+        .udostepnianie-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .device-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .device-avatar {
+            width: 48px;
+            height: 48px;
+            background: #FF9500;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            border: 2px solid #FF7000;
+        }
+        
+        .device-details {
+            flex: 1;
+        }
+        
+        .device-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        
+        .device-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #F44336;
+        }
+        
+        .device-address {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(135deg, #D4A574 0%, #B8956A 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            flex: 1;
+            font-size: 10px;
+        }
+        
+        .nav-item .icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        
+        /* Widok szczegółowy krokomierza */
+        .pedometer-detail {
+            height: calc(100% - 50px);
+            background: #fff;
+        }
+        
+        .header {
+            background: #fff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .back-btn {
+            font-size: 24px;
+            color: #333;
+            margin-right: 16px;
+        }
+        
+        .header-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .progress-section {
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .progress-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #4CAF50 0deg, #4CAF50 180deg, #e9ecef 180deg, #e9ecef 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .progress-circle.orange {
+            background: conic-gradient(from 0deg, #FF9800 0deg, #FF9800 250deg, #e9ecef 250deg, #e9ecef 360deg);
+        }
+        
+        .progress-circle.red {
+            background: conic-gradient(from 0deg, #FF5722 0deg, #FF5722 120deg, #e9ecef 120deg, #e9ecef 360deg);
+        }
+        
+        .progress-circle.gold {
+            background: conic-gradient(from 0deg, #FFD700 0deg, #FFD700 360deg);
+        }
+        
+        .progress-inner {
+            width: 160px;
+            height: 160px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        
+        .goal-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .steps-count {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .steps-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .action-buttons {
+            padding: 20px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: #D4A574;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e9ecef;
+        }
+        
+        .stats-cards {
+            padding: 20px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #D4A574;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .info-section {
+            margin: 20px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .info-icon {
+            font-size: 20px;
+            color: #2196F3;
+            margin-top: 2px;
+        }
+        
+        .info-text {
+            flex: 1;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* Historia */
+        .history-view {
+            height: calc(100% - 50px);
+            background: #fff;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            margin: 0 20px;
+            border-radius: 12px;
+            padding: 4px;
+            margin-top: 20px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #D4A574;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container {
+            padding: 20px;
+            height: 300px;
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            gap: 8px;
+        }
+        
+        .chart-container.month {
+            justify-content: flex-start;
+            overflow-x: auto;
+            gap: 4px;
+            padding-bottom: 40px;
+        }
+        
+        .chart-bar {
+            background: #D4A574;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .chart-bar.week {
+            width: 32px;
+        }
+        
+        .chart-bar.month {
+            width: 20px;
+            min-width: 20px;
+            flex-shrink: 0;
+        }
+        
+        .chart-bar.low {
+            background: #e9ecef;
+        }
+        
+        .chart-day {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .chart-bar.month .chart-day {
+            bottom: -30px;
+            font-size: 10px;
+        }
+        
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .chart-bar.month .chart-value {
+            font-size: 8px;
+        }
+        
+        .summary-stats {
+            padding: 20px;
+            background: #f8f9fa;
+            margin: 20px;
+            border-radius: 12px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .summary-label {
+            color: #666;
+        }
+        
+        .summary-value {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        /* Modal ustawiania celu */
+        .modal {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 320px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .goal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .goal-option {
+            padding: 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .goal-option.selected {
+            border-color: #D4A574;
+            background: #f8f9fa;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .modal-btn-cancel {
+            background: #f8f9fa;
+            color: #666;
+        }
+        
+        .modal-btn-confirm {
+            background: #D4A574;
+            color: white;
+        }
+        
+        /* Modal szczegółów dnia */
+        .day-modal {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            right: 20px;
+            bottom: 50px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .day-modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 320px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        
+        .day-details-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .day-details-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .day-details-date {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .day-goal-indicator {
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .day-goal-indicator.achieved {
+            background: #E8F5E8;
+            color: #2E7D32;
+        }
+        
+        .day-goal-indicator.not-achieved {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+        
+        .day-details-stats {
+            margin-bottom: 20px;
+        }
+        
+        .day-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .day-stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .day-stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .day-stat-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .day-details-close {
+            width: 100%;
+            padding: 12px;
+            background: #D4A574;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        /* Powiadomienia */
+        .notification-preview {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            z-index: 100;
+        }
+        
+        .notification-preview.achievement {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #333;
+        }
+        
+        .notification-preview.reminder {
+            background: #2196F3;
+        }
+        
+        .notification-preview.warning {
+            background: #FF9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Makiety funkcji Krokomierz - Aplikacja Bezpieczna Rodzina</h1>
+        
+        <!-- SEKCJA: MAPA GŁÓWNA Z WIDGETEM -->
+        <div class="section">
+            <h2 class="section-title">1. Widok mapy z widgetem kroków</h2>
+            <div class="mockups-grid">
+                
+                <!-- Mapa - cel nieosiągnięty -->
+                <div class="mockup-container">
+                    <div class="mockup-header">1.1. Mapa - cel nieosiągnięty (50%)</div>
+                    <div class="mockup-description">Widget czerwony, urządzenie "Córka Zuzia", 3000/6000 kroków</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">12:56</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>96%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="map-main">
+                                <div class="steps-widget red">
+                                    <div class="icon">👟</div>
+                                    <div class="count">3000</div>
+                                </div>
+                                
+                                <div class="device-marker">⌚</div>
+                                <div class="home-marker">🏠</div>
+                                
+                                <div class="location-card">
+                                    <div class="location-header">
+                                        <div class="wifi-location">
+                                            <span>📶</span>
+                                            <span>(WiFi) Lokalizacja dokładna</span>
+                                        </div>
+                                        <button class="udostepnianie-btn">Udostępnianie</button>
+                                    </div>
+                                    
+                                    <div class="device-info">
+                                        <div class="device-avatar">⌚</div>
+                                        <div class="device-details">
+                                            <div class="device-name">Córka Zuzia</div>
+                                            <div class="device-status">
+                                                <div class="status-dot"></div>
+                                                <span>24 lipca</span>
+                                                <span>📶</span>
+                                                <span>🔋 85%</span>
+                                            </div>
+                                            <div class="device-address">Szkoła Podstawowa nr 15, ul. Słoneczna 5</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bottom-nav">
+                                    <div class="nav-item">
+                                        <div class="icon">💬</div>
+                                        <div class="label">Czat</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📋</div>
+                                        <div class="label">Historia</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📍</div>
+                                        <div class="label">Lokalizuj</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📞</div>
+                                        <div class="label">Zadzwoń</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">⚫⚫⚫</div>
+                                        <div class="label">Więcej</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mapa - cel w trakcie osiągania -->
+                <div class="mockup-container">
+                    <div class="mockup-header">1.2. Mapa - cel w trakcie (75%)</div>
+                    <div class="mockup-description">Widget zielony, urządzenie "Babcia Zosia", 2250/3000 kroków</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">15:23</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>82%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="map-main">
+                                <div class="steps-widget">
+                                    <div class="icon">👟</div>
+                                    <div class="count">2250</div>
+                                </div>
+                                
+                                <div class="device-marker">⌚</div>
+                                <div class="home-marker">🏠</div>
+                                
+                                <div class="location-card">
+                                    <div class="location-header">
+                                        <div class="wifi-location">
+                                            <span>📶</span>
+                                            <span>(WiFi) Lokalizacja dokładna</span>
+                                        </div>
+                                        <button class="udostepnianie-btn">Udostępnianie</button>
+                                    </div>
+                                    
+                                    <div class="device-info">
+                                        <div class="device-avatar">⌚</div>
+                                        <div class="device-details">
+                                            <div class="device-name">Babcia Zosia</div>
+                                            <div class="device-status">
+                                                <div class="status-dot"></div>
+                                                <span>15 minut temu</span>
+                                                <span>📶</span>
+                                                <span>🔋 72%</span>
+                                            </div>
+                                            <div class="device-address">Park Centralny, Alejka Spacerowa</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bottom-nav">
+                                    <div class="nav-item">
+                                        <div class="icon">💬</div>
+                                        <div class="label">Czat</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📋</div>
+                                        <div class="label">Historia</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📍</div>
+                                        <div class="label">Lokalizuj</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📞</div>
+                                        <div class="label">Zadzwoń</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">⚫⚫⚫</div>
+                                        <div class="label">Więcej</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mapa - cel osiągnięty -->
+                <div class="mockup-container">
+                    <div class="mockup-header">1.3. Mapa - cel osiągnięty (100%+)</div>
+                    <div class="mockup-description">Widget złoty, urządzenie "Pies Max", 7200/6000 kroków</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">18:45</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>74%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="map-main">
+                                <div class="steps-widget gold">
+                                    <div class="icon">👟</div>
+                                    <div class="count">7200</div>
+                                </div>
+                                
+                                <div class="device-marker">⌚</div>
+                                <div class="home-marker">🏠</div>
+                                
+                                <div class="location-card">
+                                    <div class="location-header">
+                                        <div class="wifi-location">
+                                            <span>📶</span>
+                                            <span>(GPS) Lokalizacja dokładna</span>
+                                        </div>
+                                        <button class="udostepnianie-btn">Udostępnianie</button>
+                                    </div>
+                                    
+                                    <div class="device-info">
+                                        <div class="device-avatar">⌚</div>
+                                        <div class="device-details">
+                                            <div class="device-name">Pies Max</div>
+                                            <div class="device-status">
+                                                <div class="status-dot"></div>
+                                                <span>3 minuty temu</span>
+                                                <span>📶</span>
+                                                <span>🔋 45%</span>
+                                            </div>
+                                            <div class="device-address">Las Miejski, ścieżka rowerowa</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bottom-nav">
+                                    <div class="nav-item">
+                                        <div class="icon">💬</div>
+                                        <div class="label">Czat</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📋</div>
+                                        <div class="label">Historia</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📍</div>
+                                        <div class="label">Lokalizuj</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">📞</div>
+                                        <div class="label">Zadzwoń</div>
+                                    </div>
+                                    <div class="nav-item">
+                                        <div class="icon">⚫⚫⚫</div>
+                                        <div class="label">Więcej</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEKCJA: WIDOKI SZCZEGÓŁOWE -->
+        <div class="section">
+            <h2 class="section-title">2. Widok szczegółowy krokomierza</h2>
+            <div class="mockups-grid">
+                
+                <!-- Szczegóły - cel nieosiągnięty -->
+                <div class="mockup-container">
+                    <div class="mockup-header">2.1. Szczegóły - cel nieosiągnięty</div>
+                    <div class="mockup-description">Córka Zuzia, 3000/6000 kroków, okrąg czerwony</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">12:56</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>96%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="pedometer-detail">
+                                <div class="header">
+                                    <div class="back-btn">←</div>
+                                    <div class="header-title">Krokomierz - Córka Zuzia</div>
+                                </div>
+                                
+                                <div class="progress-section">
+                                    <div class="progress-circle red">
+                                        <div class="progress-inner">
+                                            <div class="goal-text">Cel: 6,000</div>
+                                            <div class="steps-count">3,000</div>
+                                            <div class="steps-label">Kroki dzisiaj</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary">Ustaw cel</button>
+                                    <button class="btn btn-secondary">Historia</button>
+                                </div>
+                                
+                                <div class="stats-cards">
+                                    <div class="stat-card">
+                                        <div class="stat-value">4.8k</div>
+                                        <div class="stat-label">Średnia 7 dni</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">8.2k</div>
+                                        <div class="stat-label">Najlepszy wynik</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">2🔥</div>
+                                        <div class="stat-label">Aktualna passa</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-section">
+                                    <div class="info-icon">ℹ️</div>
+                                    <div class="info-text">
+                                        <strong>Zalecana dzienna aktywność dla dzieci:</strong><br>
+                                        6000-8000 kroków dziennie wspomaga prawidłowy rozwój i zdrowie. Zachęcaj do aktywności na świeżym powietrzu!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Szczegóły - cel osiągnięty -->
+                <div class="mockup-container">
+                    <div class="mockup-header">2.2. Szczegóły - cel osiągnięty</div>
+                    <div class="mockup-description">Pies Max, 7200/6000 kroków, okrąg złoty, animacja</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">18:45</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>74%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="pedometer-detail">
+                                <div class="header">
+                                    <div class="back-btn">←</div>
+                                    <div class="header-title">Krokomierz - Pies Max</div>
+                                </div>
+                                
+                                <div class="progress-section">
+                                    <div class="progress-circle gold">
+                                        <div class="progress-inner">
+                                            <div class="goal-text">Cel: 6,000 ✅</div>
+                                            <div class="steps-count">7,200</div>
+                                            <div class="steps-label">Kroki dzisiaj</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary">Ustaw cel</button>
+                                    <button class="btn btn-secondary">Historia</button>
+                                </div>
+                                
+                                <div class="stats-cards">
+                                    <div class="stat-card">
+                                        <div class="stat-value">6.5k</div>
+                                        <div class="stat-label">Średnia 7 dni</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">9.1k</div>
+                                        <div class="stat-label">Najlepszy wynik</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">5🔥</div>
+                                        <div class="stat-label">Aktualna passa</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-section">
+                                    <div class="info-icon">ℹ️</div>
+                                    <div class="info-text">
+                                        <strong>Aktywność dla psów rasy średniej:</strong><br>
+                                        5000-7000 kroków dziennie zapewnia odpowiedni poziom aktywności. Max ma świetną kondycję!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Szczegóły - senior -->
+                <div class="mockup-container">
+                    <div class="mockup-header">2.3. Szczegóły - urządzenie seniorskie</div>
+                    <div class="mockup-description">Babcia Zosia, 2250/3000 kroków, okrąg zielony</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">15:23</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>82%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="pedometer-detail">
+                                <div class="header">
+                                    <div class="back-btn">←</div>
+                                    <div class="header-title">Krokomierz - Babcia Zosia</div>
+                                </div>
+                                
+                                <div class="progress-section">
+                                    <div class="progress-circle orange">
+                                        <div class="progress-inner">
+                                            <div class="goal-text">Cel: 3,000</div>
+                                            <div class="steps-count">2,250</div>
+                                            <div class="steps-label">Kroki dzisiaj</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary">Ustaw cel</button>
+                                    <button class="btn btn-secondary">Historia</button>
+                                </div>
+                                
+                                <div class="stats-cards">
+                                    <div class="stat-card">
+                                        <div class="stat-value">2.8k</div>
+                                        <div class="stat-label">Średnia 7 dni</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">4.1k</div>
+                                        <div class="stat-label">Najlepszy wynik</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">4🔥</div>
+                                        <div class="stat-label">Aktualna passa</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-section">
+                                    <div class="info-icon">ℹ️</div>
+                                    <div class="info-text">
+                                        <strong>Zalecana dzienna aktywność dla seniorów:</strong><br>
+                                        2500-4000 kroków dziennie wspomaga zdrowie serca i utrzymanie kondycji. Każdy krok się liczy!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEKCJA: HISTORIA -->
+        <div class="section">
+            <h2 class="section-title">3. Widoki historii</h2>
+            <div class="mockups-grid">
+                
+                <!-- Historia - tydzień -->
+                <div class="mockup-container">
+                    <div class="mockup-header">3.1. Historia - widok tygodniowy</div>
+                    <div class="mockup-description">Wykres słupkowy 7 dni, klikalne słupki, statystyki tygodniowe</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">12:58</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>96%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="history-view">
+                                <div class="header">
+                                    <div class="back-btn">←</div>
+                                    <div class="header-title">Historia kroków - Córka Zuzia</div>
+                                </div>
+                                
+                                <div class="tabs">
+                                    <div class="tab active">Tydzień</div>
+                                    <div class="tab">Miesiąc</div>
+                                </div>
+                                
+                                <div class="chart-container">
+                                    <div class="chart-bar week" style="height: 80px;">
+                                        <div class="chart-day">Pn</div>
+                                        <div class="chart-value">4.2k</div>
+                                    </div>
+                                    <div class="chart-bar week" style="height: 120px;">
+                                        <div class="chart-day">Wt</div>
+                                        <div class="chart-value">6.1k</div>
+                                    </div>
+                                    <div class="chart-bar week" style="height: 160px;">
+                                        <div class="chart-day">Śr</div>
+                                        <div class="chart-value">8.2k</div>
+                                    </div>
+                                    <div class="chart-bar week" style="height: 140px;">
+                                        <div class="chart-day">Cz</div>
+                                        <div class="chart-value">7.3k</div>
+                                    </div>
+                                    <div class="chart-bar week low" style="height: 60px;">
+                                        <div class="chart-day">Pt</div>
+                                        <div class="chart-value">2.8k</div>
+                                    </div>
+                                    <div class="chart-bar week" style="height: 180px;">
+                                        <div class="chart-day">Sb</div>
+                                        <div class="chart-value">9.1k</div>
+                                    </div>
+                                    <div class="chart-bar week low" style="height: 70px;">
+                                        <div class="chart-day">Nd</div>
+                                        <div class="chart-value">3.0k</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="summary-stats">
+                                    <div class="summary-row">
+                                        <span class="summary-label">Średnia tygodniowa:</span>
+                                        <span class="summary-value">5,821 kroków</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="summary-label">Cel osiągnięty:</span>
+                                        <span class="summary-value">4/7 dni</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="summary-label">Najlepszy dzień:</span>
+                                        <span class="summary-value">Sobota (9,100)</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="summary-label">Wzrost vs poprzedni tydzień:</span>
+                                        <span class="summary-value" style="color: #4CAF50;">+15%</span>
+                                    </div>
+                                </div>
+                                
+                                <div style="padding: 20px;">
+                                    <button class="btn btn-secondary" style="width: 100%;">
+                                        📥 Eksportuj dane
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Historia - miesiąc -->
+                <div class="mockup-container">
+                    <div class="mockup-header">3.2. Historia - widok miesięczny</div>
+                    <div class="mockup-description">31 słupków z scrollem poziomym, statystyki miesięczne</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">12:59</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>96%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="history-view">
+                                <div class="header">
+                                    <div class="back-btn">←</div>
+                                    <div class="header-title">Historia kroków - Pies Max</div>
+                                </div>
+                                
+                                <div class="tabs">
+                                    <div class="tab">Tydzień</div>
+                                    <div class="tab active">Miesiąc</div>
+                                </div>
+                                
+                                <div class="chart-container month">
+                                    <div class="chart-bar month" style="height: 120px;">
+                                        <div class="chart-day">1</div>
+                                        <div class="chart-value">6.2k</div>
+                                    </div>
+                                    <div class="chart-bar month" style="height: 80px;">
+                                        <div class="chart-day">2</div>
+                                        <div class="chart-value">4.1k</div>
+                                    </div>
+                                    <div class="chart-bar month" style="height: 140px;">
+                                        <div class="chart-day">3</div>
+                                        <div class="chart-value">7.2k</div>
+                                    </div>
+                                    <div class="chart-bar month low" style="height: 60px;">
+                                        <div class="chart-day">4</div>
+                                        <div class="chart-value">2.8k</div>
+                                    </div>
+                                    <div class="chart-bar month" style="height: 100px;">
+                                        <div class="chart-day">5</div>
+                                        <div class="chart-value">5.1k</div>
+                                    </div>
+                                    <div class="chart-bar month" style="height: 160px;">
+                                        <div class="chart-day">6</div>
+                                        <div class="chart-value">8.7k</div>
+                                    </div>
+                                    <div class="chart-bar month" style="height: 130px;">
+                                        <div class="chart-day">7</div>
+                                        <div class="chart-value">6.9k</div>
+                                    </div>
+                                    <div class="chart-bar month" style="height: 110px;">
+                                        <div class="chart-day">8</div>
+                                        <div class="chart-value">5.8k</div>
+                                    </div>
+                                    <div class="chart-bar month low" style="height: 70px;">
+                                        <div class="chart-day">9</div>
+                                        <div class="chart-value">3.5k</div>
+                                    </div>
+                                    <div class="chart-bar month" style="height: 150px;">
+                                        <div class="chart-day">10</div>
+                                        <div class="chart-value">8.1k</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="summary-stats">
+                                    <div class="summary-row">
+                                        <span class="summary-label">Średnia miesięczna:</span>
+                                        <span class="summary-value">6,234 kroków</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="summary-label">Cel osiągnięty:</span>
+                                        <span class="summary-value">21/31 dni</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="summary-label">Najlepszy dzień:</span>
+                                        <span class="summary-value">6 sierpnia (8,700)</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="summary-label">Wzrost vs poprzedni miesiąc:</span>
+                                        <span class="summary-value" style="color: #4CAF50;">+8%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SEKCJA: MODALE -->
+        <div class="section">
+            <h2 class="section-title">4. Modale i okna dialogowe</h2>
+            <div class="mockups-grid">
+                
+                <!-- Modal ustawiania celu -->
+                <div class="mockup-container">
+                    <div class="mockup-header">4.1. Modal - ustawianie celu</div>
+                    <div class="mockup-description">Wybór predefiniowanych celów + opcja własnego celu</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">13:05</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>92%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="pedometer-detail">
+                                <!-- Tło z krokomierzem -->
+                                <div class="header">
+                                    <div class="back-btn">←</div>
+                                    <div class="header-title">Krokomierz - Córka Zuzia</div>
+                                </div>
+                                
+                                <div class="progress-section">
+                                    <div class="progress-circle">
+                                        <div class="progress-inner">
+                                            <div class="goal-text">Cel: 6,000</div>
+                                            <div class="steps-count">3,000</div>
+                                            <div class="steps-label">Kroki dzisiaj</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Modal -->
+                                <div class="modal">
+                                    <div class="modal-content">
+                                        <div class="modal-title">Ustaw dzienny cel dla Córka Zuzia</div>
+                                        <div class="goal-options">
+                                            <div class="goal-option">3,000 kroków</div>
+                                            <div class="goal-option selected">6,000 kroków (zalecane)</div>
+                                            <div class="goal-option">8,000 kroków</div>
+                                            <div class="goal-option">10,000 kroków</div>
+                                            <div class="goal-option">Własny cel...</div>
+                                        </div>
+                                        <div class="modal-buttons">
+                                            <button class="modal-btn modal-btn-cancel">Anuluj</button>
+                                            <button class="modal-btn modal-btn-confirm">Zapisz</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal szczegółów dnia - cel osiągnięty -->
+                <div class="mockup-container">
+                    <div class="mockup-header">4.2. Modal - szczegóły dnia (cel osiągnięty)</div>
+                    <div class="mockup-description">Kliknięcie w słupek wykresu - dzień z osiągniętym celem</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                <div class="status-left">
+                                    <div class="time">13:07</div>
+                                    <span>❉</span><span>⚏</span><span>M</span><span>•</span>
+                                </div>
+                                <div class="status-right">
+                                    <span>🔔</span><span>❅</span><span>📶</span><span>VoLTE</span><span>📶</span><span>91%</span><span>🔋</span>
+                                </div>
+                            </div>
+                            
+                            <div class="history-view">
+                                <!-- Tło z historią -->
+                                <div class="header">
+                                    <div class="back-btn">←</div>
+                                    <div class="header-title">Historia kroków - Pies Max</div>
+                                </div>
+                                
+                                <div class="tabs">
+                                    <div class="tab active">Tydzień</div>
+                                    <div class="tab">Miesiąc</div>
+                                </div>
+                                
+                                <!-- Modal -->
+                                <div class="day-modal">
+                                    <div class="day-modal-content">
+                                        <div class="day-details-header">
+                                            <div class="day-details-title">Sobota</div>
+                                            <div class="day-details-date">6 sierpnia 2025</div>
+                                        </div>
+                                        
+                                        <div class="day-goal-indicator achieved">
+                                            <strong>🎉 Cel dzienny osiągnięty!</strong><br>
+                                            <span style="font-size: 14px;">Świetny wynik!</span>
+                                        </div>
+                                        
+                                        <div class="day-details-stats">
+                                            <div class="day-stat-row">
+                                                <span class="day-stat-label">Liczba kroków:</span>
+                                                <span class="day-stat-value">8,700</span>
+                                            </div>
+                                            <div class="day-stat-row">
+                                                <span class="day-stat-label">Cel dzienny:</span>
+                                                <span class="day-stat-value">6,000</span>
+                                            </div>
+                                            <div class="day-stat-row">
+                                                <span class="day-stat-label">Procent celu:</span>
+                                                <span class="day-stat-value">145%</span>
+                                            </div>
+                                            <div class="day-stat-row">
+                                                <span class="day-stat-label">Dystans (szacowany):</span>
+                                                <span class="day-stat-value">6.5 km</span>
+                                            </div>
+                                            <div class="day-stat-row">
+                                                <span class="day-stat-label">Kalorie (szacowane):</span>
+                                                <span class="day-stat-value">348 kcal</span>
+                                            </div>
+                                            <div class="day-stat-row">
+                                                <span class="day-stat-label">Czas aktywności:</span>
+                                                <span class="day-stat-value">87 min</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <button class="day-details-close">Zamknij</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal szczegółów dnia - cel nieosiągnięty -->
+                <div class="mockup-container">
+                    <div class="mockup-header">4.3. Modal - szczegóły dnia (cel nieosiągnięty)</div>
+                    <div class="mockup-description">Dzień bez osiągnięcia celu z informacją o brakujących krokach</div>
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="status-bar">
+                                

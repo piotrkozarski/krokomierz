@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0a0a0a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Steps MVP layout */
+.steps-mvp {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  gap: 12px;
+}
+
+.today-center {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.today-center > * { margin: 0; }
+
+.today-center h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.today-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  padding: 18px 20px;
+}
+
+.today-value {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.today-sub {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.history-btn {
+  align-self: center;
+  width: 90%;
+  max-width: 380px;
+  padding: 12px 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  background: #fff;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0,0,0,.10);
+  cursor: pointer;
+}
+
+
