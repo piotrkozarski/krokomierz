@@ -30,7 +30,6 @@ export default function PedometerDetail() {
           <div className="today-card">
             <h2>Dzisiejsze kroki</h2>
             <div className="today-value">{Number(totalToday || 0).toLocaleString('pl-PL')}</div>
-            <div className="today-sub">kroków dziś</div>
           </div>
         </div>
         <button className="history-btn" onClick={() => navigate('/steps/history')}>Historia</button>
