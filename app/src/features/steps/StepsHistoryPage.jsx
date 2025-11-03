@@ -3,6 +3,7 @@ import StepsHistoryChart from './StepsHistoryChart.jsx'
 import { usePedometer } from '../pedometer/data/PedometerProvider.jsx'
 import { mergeDeviceHistoryWithStorage, maybeSeedTodayDev } from './utils.js'
 import { lastNDays } from '../pedometer/utils.js'
+import { coerceSteps } from '@/utils/stepsCoerce.js'
 
 export default function StepsHistoryPage() {
   const { devices } = usePedometer()
@@ -16,7 +17,7 @@ export default function StepsHistoryPage() {
     .map(([date, steps]) => ({ date, steps }))
     .sort((a, b) => (a.date < b.date ? 1 : -1)), [historyMap])
 
-  const weekData = useMemo(() => {
+  const weekDataRaw = useMemo(() => {
     const days = lastNDays(historyArray, 7).reverse() // oldest -> newest
     const dayNames = ['Nd','Pn','Wt','Śr','Cz','Pt','Sb']
     return days.map(d => {
@@ -28,7 +29,7 @@ export default function StepsHistoryPage() {
     })
   }, [historyArray])
 
-  const monthData = useMemo(() => {
+  const monthDataRaw = useMemo(() => {
     const days = lastNDays(historyArray, 31).reverse()
     return days.map(d => {
       const dt = new Date(d.date)
@@ -37,6 +38,9 @@ export default function StepsHistoryPage() {
       return { label, value: val, muted: val === 0 }
     })
   }, [historyArray])
+
+  const safeWeekData = useMemo(() => weekDataRaw.map(d => ({ ...d, value: coerceSteps(d.value) })), [weekDataRaw])
+  const safeMonthData = useMemo(() => monthDataRaw.map(d => ({ ...d, value: coerceSteps(d.value) })), [monthDataRaw])
 
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
@@ -47,7 +51,7 @@ export default function StepsHistoryPage() {
             <button className={`tab ${mode==='week'?'tab--active':''}`} onClick={()=>setMode('week')}>Tydzień</button>
             <button className={`tab ${mode==='month'?'tab--active':''}`} onClick={()=>setMode('month')}>Miesiąc</button>
           </div>
-          <StepsHistoryChart data={mode === 'week' ? weekData : monthData} mode={mode} />
+          <StepsHistoryChart data={mode === 'week' ? safeWeekData : safeMonthData} mode={mode} />
         </div>
       </div>
     </div>

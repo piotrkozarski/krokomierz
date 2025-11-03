@@ -8,9 +8,9 @@
 .bars {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  align-items: end;
+  align-items: stretch; /* ważne: grid nie „docina” dzieci od dołu */
   gap: 12px;
-  height: 180px;
+  height: 200px; /* rzeczywista wysokość kontenera */
   padding: 8px 6px 0;
   position: relative;
 }
@@ -19,15 +19,16 @@
 .bars--scroll {
   display: flex;
   gap: 12px;
-  overflow-x: auto;
+  overflow-x: auto !important;
   overflow-y: hidden;
-  height: 180px;
+  height: 200px;
   padding: 8px 8px 0;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x;
   mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
 }
+.bars--scroll > .bar-wrap { height: 100%; }
 
 .bars--scroll::-webkit-scrollbar { height: 0; }
 .bars--scroll { scrollbar-width: none; }
@@ -35,8 +36,10 @@
 /* Pojedynczy słupek */
 .bar-wrap {
   position: relative;
+  height: 100%; /* baza dla % wysokości słupka */
   display: flex;
   flex-direction: column;
+  justify-content: flex-end; /* słupek rośnie od dołu */
   align-items: center;
   gap: 6px;
   min-width: 28px;
@@ -45,8 +48,11 @@
 
 .bar {
   width: 18px;
+  height: 10%; /* nadpisywane stylem inline (np. 63%) */
+  min-height: 4px; /* żeby było co zauważyć nawet dla 0 */
   border-radius: 6px;
   box-shadow: inset 0 2px 0 rgba(0,0,0,.05);
+  outline: 1px solid rgba(0,0,0,.06); /* DEBUG – usuń po weryfikacji */
 }
 
 .bar--active { background: #C7925B; }
