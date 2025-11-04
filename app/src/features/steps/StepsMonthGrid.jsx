@@ -28,27 +28,41 @@ export default function StepsMonthGrid({ year, month, historyMap = {}, startWeek
     cells.push({ empty: false, day, iso, steps, key: iso })
   }
 
+  const filledDays = cells.filter(c => !c.empty)
+  const avgMonth = filledDays.length
+    ? Math.round(filledDays.reduce((s,c)=> s + (Number(c.steps)||0), 0) / filledDays.length)
+    : 0
+
   return (
     <div className="month-grid">
+      {/* Nagłówki dni: Pn..Nd */}
       <div className="month-grid__head">
         {['Pn','Wt','Śr','Cz','Pt','Sb','Nd'].map((n) => (
           <div key={n} className="month-grid__head-cell">{n}</div>
         ))}
       </div>
+
+      {/* Siatka dni */}
       <div className="month-grid__body">
-        {cells.map((c) => c.empty ? (
-          <div key={c.key} className="day-tile day-tile--empty" />
-        ) : (
-          <div key={c.key} className="day-tile" title={`${c.iso}: ${formatStepsLong(c.steps)} kroków`}>
-            <div className="day-tile__top">
-              <span className="day-tile__day">{c.day}</span>
+        {cells.map((c) =>
+          c.empty ? (
+            <div key={c.key} className="day-tile day-tile--empty" />
+          ) : (
+            <div key={c.key} className="day-tile" title={`${c.iso}: ${formatStepsLong(c.steps)} kroków`}>
+              <div className="day-tile__top">
+                <span className="day-tile__day">{c.day}</span>
+              </div>
+              <div className="day-tile__value">{formatStepsShort(c.steps)}</div>
+              {/* pasek celu był usunięty w MVP, zostaje wyłączony */}
             </div>
-            <div className="day-tile__value">{formatStepsShort(c.steps)}</div>
-            <div className="day-tile__bar">
-              <div className="day-tile__bar-fill" style={{ width: `${Math.min(100, Math.round((c.steps / 15000) * 100))}%` }} />
-            </div>
-          </div>
-        ))}
+          )
+        )}
+      </div>
+
+      {/* Karta średniej miesięcznej — styl identyczny jak tygodniowa */}
+      <div className="avg-card">
+        <span className="avg-title">Średnia miesięczna:</span>
+        <strong className="avg-value">{formatStepsLong(avgMonth)} kroków</strong>
       </div>
     </div>
   )

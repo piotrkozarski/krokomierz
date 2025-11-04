@@ -30,14 +30,29 @@ export default function StepsHistoryChart({ data = [], mode = 'week' }) {
           const h = Math.round((Math.max(0, d.value) / max) * 100)
           return (
             <div className={`bar-wrap ${d.today ? 'bar-wrap--today' : ''}`} role="listitem" key={i}>
-              <span className="bar-label">{formatStepsShort(d.value)}</span>
-              <div
-                className={`bar ${d.muted ? 'bar--muted' : 'bar--active'}`}
-                style={{ height: `${h}%` }}
-                aria-label={`${d.label}: ${formatStepsLong(d.value)} kroków`}
-                title={`${d.label}: ${formatStepsLong(d.value)} kroków`}
-              />
-              <span className="bar-x">{d.label}</span>
+              {mode === 'week' ? (
+                <>
+                  <span className="bar-x bar-x--top">{d.label}</span>
+                  <div
+                    className={`bar ${d.muted ? 'bar--muted' : 'bar--active'}`}
+                    style={{ height: `${h}%` }}
+                    aria-label={`${d.label}: ${formatStepsLong(d.value)} kroków`}
+                    title={`${d.label}: ${formatStepsLong(d.value)} kroków`}
+                  />
+                  <span className="bar-value">{formatStepsShort(d.value)}</span>
+                </>
+              ) : (
+                <>
+                  <span className="bar-label">{formatStepsShort(d.value)}</span>
+                  <div
+                    className={`bar ${d.muted ? 'bar--muted' : 'bar--active'}`}
+                    style={{ height: `${h}%` }}
+                    aria-label={`${d.label}: ${formatStepsLong(d.value)} kroków`}
+                    title={`${d.label}: ${formatStepsLong(d.value)} kroków`}
+                  />
+                  <span className="bar-x">{d.label}</span>
+                </>
+              )}
             </div>
           )
         })}
