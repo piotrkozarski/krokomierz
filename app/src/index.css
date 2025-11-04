@@ -96,6 +96,7 @@ body {
 .avg-value { font-weight: 700; }
 
 /* Tabs */
+.tabs-outer { width: 100%; display: flex; justify-content: center; }
 .tabs { display: inline-flex; gap: 6px; padding: 6px; background: #f5f6f7; border-radius: 999px; }
 .tab { padding: 8px 14px; border-radius: 999px; border: 1px solid transparent; background: transparent; font-weight: 600; color: #6b7280; cursor: pointer; }
 .tab--active { background: #fff; color: #111827; border-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,.06); }

@@ -4,6 +4,7 @@ import { usePedometer } from '../pedometer/data/PedometerProvider.jsx'
 import { mergeDeviceHistoryWithStorage, maybeSeedTodayDev } from './utils.js'
 import { lastNDays } from '../pedometer/utils.js'
 import { coerceSteps } from '@/utils/stepsCoerce.js'
+import StepsMonthGrid from '@/features/steps/StepsMonthGrid'
 
 export default function StepsHistoryPage() {
   const { devices } = usePedometer()
@@ -18,8 +19,8 @@ export default function StepsHistoryPage() {
     .sort((a, b) => (a.date < b.date ? 1 : -1)), [historyMap])
 
   const now = new Date()
-  const activeYear = now.getFullYear()
-  const activeMonth = now.getMonth() // 0-11
+  const [activeYear] = useState(now.getFullYear())
+  const [activeMonth] = useState(now.getMonth()) // 0-11
   const getDaysInMonth = (y, m) => new Date(y, m + 1, 0).getDate()
   const toISO = (y, m, d) => `${y}-${String(m + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
   const isTodayFn = (y, m, d) => {
@@ -58,11 +59,17 @@ export default function StepsHistoryPage() {
       <div className="px-4 pt-4 pb-2 text-center font-medium">Historia – {active?.name || ''}</div>
       <div className="flex-1 overflow-y-auto px-4 pb-4">
         <div className="w-full bg-white rounded-xl shadow p-4">
-          <div className="tabs mb-4">
+          <div className="tabs-outer mb-4">
+            <div className="tabs">
             <button className={`tab ${mode==='week'?'tab--active':''}`} onClick={()=>setMode('week')}>Tydzień</button>
             <button className={`tab ${mode==='month'?'tab--active':''}`} onClick={()=>setMode('month')}>Miesiąc</button>
+            </div>
           </div>
-          <StepsHistoryChart data={mode === 'week' ? safeWeekData : safeMonthData} mode={mode} />
+          {mode === 'week' ? (
+            <StepsHistoryChart data={safeWeekData} mode="week" />
+          ) : (
+            <StepsMonthGrid year={activeYear} month={activeMonth} historyMap={historyMap} />
+          )}
         </div>
       </div>
     </div>
