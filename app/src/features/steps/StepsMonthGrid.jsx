@@ -28,6 +28,12 @@ export default function StepsMonthGrid({ year, month, historyMap = {}, startWeek
     cells.push({ empty: false, day, iso, steps, key: iso })
   }
 
+  const monthNamesPl = [
+    'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+    'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'
+  ]
+  const monthTitle = `${monthNamesPl[month]} ${year}`
+
   const filledDays = cells.filter(c => !c.empty)
   const avgMonth = filledDays.length
     ? Math.round(filledDays.reduce((s,c)=> s + (Number(c.steps)||0), 0) / filledDays.length)
@@ -35,6 +41,7 @@ export default function StepsMonthGrid({ year, month, historyMap = {}, startWeek
 
   return (
     <div className="month-grid">
+      <div className="month-grid__title">{monthTitle}</div>
       {/* Nagłówki dni: Pn..Nd */}
       <div className="month-grid__head">
         {['Pn','Wt','Śr','Cz','Pt','Sb','Nd'].map((n) => (

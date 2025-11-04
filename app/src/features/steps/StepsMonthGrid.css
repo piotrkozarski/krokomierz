@@ -33,4 +33,12 @@
 .avg-title { color: #6b7280; }
 .avg-value { font-weight: 700; }
 
+.month-grid__title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
 
