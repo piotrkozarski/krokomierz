@@ -32,13 +32,15 @@ export default function StepsHistoryChart({ data = [], mode = 'week' }) {
             <div className={`bar-wrap ${d.today ? 'bar-wrap--today' : ''}`} role="listitem" key={i}>
               {mode === 'week' ? (
                 <>
-                  <span className="bar-x bar-x--top">{d.label}</span>
-                  <div
-                    className={`bar ${d.muted ? 'bar--muted' : 'bar--active'}`}
-                    style={{ height: `${h}%` }}
-                    aria-label={`${d.label}: ${formatStepsLong(d.value)} kroków`}
-                    title={`${d.label}: ${formatStepsLong(d.value)} kroków`}
-                  />
+                  <div className="bar-top"><span className="bar-x">{d.label}</span></div>
+                  <div className="bar-holder">
+                    <div
+                      className={`bar ${d.muted ? 'bar--muted' : 'bar--active'}`}
+                      style={{ height: `${h}%` }}
+                      aria-label={`${d.label}: ${formatStepsLong(d.value)} kroków`}
+                      title={`${d.label}: ${formatStepsLong(d.value)} kroków`}
+                    />
+                  </div>
                   <span className="bar-value">{formatStepsShort(d.value)}</span>
                 </>
               ) : (
